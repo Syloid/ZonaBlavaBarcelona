@@ -1,0 +1,218 @@
+<html>
+
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+</head>
+
+<body>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFreq">
+        Prem per canviar-la
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalFreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Freqüència d'actualització</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label>Freqüència d'actualització: </label> <input type="number" min="1" id="freq">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tancar</button>
+                    <button type="button" class="btn btn-primary" id="modalGuardar">Guardar canvis</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" id="stop">Stop</button>
+    <button class="btn btn-primary" id="rep">Rep</button>
+    </div>
+    <div id="contingut">Freqüència d'actualització actual: <span id="interval"></span></div>
+    <!--<div id="mapid" style="height: 500px; width: 500px; position: absolute"></div>-->
+    <div id='mapContainer'></div>
+    <div id="chart_div" style="float: right;"></div>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            inicialitzar(3);
+            //actualitzaDades();
+        });
+
+        function chart(info) {
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+
+                var datos = new Array();
+                for (tipo in info) {
+                    var estacio = new Array(tipo);
+                    estacio.push(info[tipo]);
+                    datos.push(estacio);
+                }
+
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows(datos);
+
+
+                // Set chart options
+                var options = {
+                    'title': 'Quantitat d\'estacions per tipus',
+                    'width': 400,
+                    'height': 300
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                $("chart_div").remove();
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+        }
+
+        function inicialitzar(frequencia) {
+            var frequenciaActualitzacio = frequencia; //inicialitzem
+            interval = setInterval(consultaDades, frequenciaActualitzacio * 1000); //actualitzem dades cada quan toqui....
+
+            $("#interval").html(parseInt(frequenciaActualitzacio));
+        }
+
+        //var dadesRebudes = {};
+        var lastUpdateTime = 0;
+
+        function consultaDades() {
+            $.ajax({
+                url: 'https://opendata-ajuntament.barcelona.cat/resources/bsm/PSIU_AREABLAVA.JSON'
+            }).done(function (data) {
+                if (data.updateTime != lastUpdateTime) {
+                    lastUpdateTime = data.updateTime;
+                    actualitzaDadesPantalla(data);
+                }
+            })
+        }
+
+        function actualitzaDadesPantalla(data) {
+            var FECHA_INICI_PREDICCIO = data.OPENDATA_PSIU_APPARKB[0].FH_INICIO;
+            var aparcaments = data.OPENDATA_PSIU_APPARKB[1].TRAMOS[0].features;
+
+            var TIPUS_ZONA = []; //Blava o verda
+            var TIPUS_TARIFA = []; //Tots els tipus de tarifa
+            var TIPUS_HORARI = []; // Tots els horaris
+            //console.log(FECHA_INICI_PREDICCIO);
+            for (i = 0; i < aparcaments.length; i++) {
+                console.log(aparcaments[i]);
+                isNaN(TIPUS_ZONA[aparcaments[i].properties.TIPO]) ? TIPUS_ZONA[aparcaments[i].properties.TIPO] = 0 :
+                    TIPUS_ZONA[aparcaments[i].properties.TIPO]++;
+                isNaN(TIPUS_TARIFA[aparcaments[i].properties.TARIFA]) ? TIPUS_TARIFA[aparcaments[i].properties.TARIFA] =
+                    0 : TIPUS_TARIFA[aparcaments[i].properties.TARIFA]++;
+                isNaN(TIPUS_HORARI[aparcaments[i].properties.HORARIO]) ? TIPUS_HORARI[aparcaments[i].properties.HORARIO] =
+                    0 : TIPUS_HORARI[aparcaments[i].properties.HORARIO]++;
+            }
+            //console.log(TIPUS_ZONA);
+            //console.log(TIPUS_TARIFA);
+            //console.log(TIPUS_HORARI);
+
+            /*arrayTipus = [];
+            arrayBicisPerTipus = [];
+            arraySlots = [];
+
+            $("#txt").remove();
+
+            var linea = "<div id='txt'><p>Nova actualització <strong>" + lastUpdateTime + "</strong>";
+
+            //recorro array i vaig posant ja dades
+            for (i = 0; i < data.stations.length; i++) {
+                isNaN(arrayTipus[data.stations[i].type]) ? arrayTipus[data.stations[i].type] = 0 : arrayTipus[data.stations[
+                    i].type]++;
+                isNaN(arrayBicisPerTipus[data.stations[i].type]) ? arrayBicisPerTipus[data.stations[i].type] = parseInt(
+                    data.stations[i].bikes) : arrayBicisPerTipus[data.stations[i].type] += parseInt(data.stations[i]
+                    .bikes);
+                isNaN(arraySlots[data.stations[i].type]) ? arraySlots[data.stations[i].type] = parseInt(data.stations[i]
+                    .slots) : arraySlots[data.stations[i].type] += parseInt(data.stations[i].slots);
+            }*/
+            map(aparcaments);
+            //chart(arrayTipus);
+
+            /*
+            for (tipo in arrayTipus) {
+                linea = linea + "<br>Estació tipus:" + tipo + " hi ha <strong>" + arrayTipus[tipo] +
+                    "</strong> estacions amb <strong>" + arrayBicisPerTipus[tipo] +
+                    "</strong> bicis disponibles i <strong>" + arraySlots[tipo] + "</strong> slots lliures.";
+            }
+            //afegueixo contingut dins html
+            $("#contingut").append(linea + "</p></div>");
+            */
+        }
+
+        function map(data) {
+
+            $("#mapid").remove();
+            document.getElementById('mapContainer').innerHTML =
+                "<div id='mapid' style='width: 1200; height: 600px; float: left;'></div>";
+
+            var mymap = L.map('mapid').setView([41.3908901, 2.1709899], 13);
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox.streets',
+                accessToken: 'pk.eyJ1Ijoic3lsb2lkIiwiYSI6ImNqdDh5Zm14bzAzMXU0M3F0Z3YxOTc5dnEifQ.dENVumuAU-SgCnUDsaqeKQ'
+            }).addTo(mymap);
+
+            for (i = 0; i < data.length; i++) {
+                var localitzacioAparcament = data[i].geometry.coordinates[0][0];
+                var localitzacioAparcament2 = data[i].geometry.coordinates[0][1];
+                //console.log(localitzacioAparcament);
+                var polygon = L.polygon([
+                    [localitzacioAparcament[1], localitzacioAparcament[0]],
+                    [localitzacioAparcament2[1], localitzacioAparcament2[0]]
+                ]).addTo(mymap);
+                /*var marker = L.marker([localitzacioAparcament[1], localitzacioAparcament[0]]).addTo(mymap);
+                var marker = L.marker([localitzacioAparcament2[1], localitzacioAparcament2[0]]).addTo(mymap);*/
+            }
+        }
+
+        $("#modalGuardar").click(function () {
+            clearInterval(interval);
+            inicialitzar(parseInt($("#freq").val()));
+            $("#modalFreq").modal("hide");
+        });
+
+        $("#stop").click(function () {
+            clearInterval(interval);
+        });
+        $("#rep").click(function () {
+            inicialitzar(3);
+        });
+    </script>
+</body>
+
+</html>
