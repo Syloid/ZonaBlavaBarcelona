@@ -4,24 +4,43 @@
     <title>TODO supply a title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
 </head>
 
 <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">ZonaBlavaBarcelona</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </nav>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFreq">
         Prem per canviar-la
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="modalFreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalFreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -48,8 +67,8 @@
     <div id='mapContainer'></div>
     <div id="chart_div" style="float: right;"></div>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             inicialitzar(3);
@@ -113,29 +132,25 @@
             $.ajax({
                 url: 'https://opendata-ajuntament.barcelona.cat/resources/bsm/PSIU_AREABLAVA.JSON'
             }).done(function (data) {
-                if (data.updateTime != lastUpdateTime) {
-                    lastUpdateTime = data.updateTime;
+                if (data.OPENDATA_PSIU_APPARKB[0].FH_INICIO != lastUpdateTime) {
+                    lastUpdateTime = data.OPENDATA_PSIU_APPARKB[0].FH_INICIO;
                     actualitzaDadesPantalla(data);
                 }
             })
         }
 
         function actualitzaDadesPantalla(data) {
-            var FECHA_INICI_PREDICCIO = data.OPENDATA_PSIU_APPARKB[0].FH_INICIO;
+
             var aparcaments = data.OPENDATA_PSIU_APPARKB[1].TRAMOS[0].features;
 
             var TIPUS_ZONA = []; //Blava o verda
             var TIPUS_TARIFA = []; //Tots els tipus de tarifa
             var TIPUS_HORARI = []; // Tots els horaris
-            //console.log(FECHA_INICI_PREDICCIO);
+
             for (i = 0; i < aparcaments.length; i++) {
-                console.log(aparcaments[i]);
-                isNaN(TIPUS_ZONA[aparcaments[i].properties.TIPO]) ? TIPUS_ZONA[aparcaments[i].properties.TIPO] = 0 :
-                    TIPUS_ZONA[aparcaments[i].properties.TIPO]++;
-                isNaN(TIPUS_TARIFA[aparcaments[i].properties.TARIFA]) ? TIPUS_TARIFA[aparcaments[i].properties.TARIFA] =
-                    0 : TIPUS_TARIFA[aparcaments[i].properties.TARIFA]++;
-                isNaN(TIPUS_HORARI[aparcaments[i].properties.HORARIO]) ? TIPUS_HORARI[aparcaments[i].properties.HORARIO] =
-                    0 : TIPUS_HORARI[aparcaments[i].properties.HORARIO]++;
+                isNaN(TIPUS_ZONA[aparcaments[i].properties.TIPO]) ? TIPUS_ZONA[aparcaments[i].properties.TIPO] = 0 : TIPUS_ZONA[aparcaments[i].properties.TIPO]++;
+                isNaN(TIPUS_TARIFA[aparcaments[i].properties.TARIFA]) ? TIPUS_TARIFA[aparcaments[i].properties.TARIFA] = 0 : TIPUS_TARIFA[aparcaments[i].properties.TARIFA]++;
+                isNaN(TIPUS_HORARI[aparcaments[i].properties.HORARIO]) ? TIPUS_HORARI[aparcaments[i].properties.HORARIO] = 0 : TIPUS_HORARI[aparcaments[i].properties.HORARIO]++;
             }
             //console.log(TIPUS_ZONA);
             //console.log(TIPUS_TARIFA);
@@ -147,7 +162,6 @@
 
             $("#txt").remove();
 
-            var linea = "<div id='txt'><p>Nova actualització <strong>" + lastUpdateTime + "</strong>";
 
             //recorro array i vaig posant ja dades
             for (i = 0; i < data.stations.length; i++) {
@@ -162,8 +176,10 @@
             map(aparcaments);
             //chart(arrayTipus);
 
+
             /*
-            for (tipo in arrayTipus) {
+            var linea = "<div id='txt'><p>Nova actualització <strong>" + lastUpdateTime + "</strong>";
+            for (tipo in TIPUS_ZONA) {
                 linea = linea + "<br>Estació tipus:" + tipo + " hi ha <strong>" + arrayTipus[tipo] +
                     "</strong> estacions amb <strong>" + arrayBicisPerTipus[tipo] +
                     "</strong> bicis disponibles i <strong>" + arraySlots[tipo] + "</strong> slots lliures.";
@@ -190,14 +206,52 @@
             for (i = 0; i < data.length; i++) {
                 var localitzacioAparcament = data[i].geometry.coordinates[0][0];
                 var localitzacioAparcament2 = data[i].geometry.coordinates[0][1];
-                //console.log(localitzacioAparcament);
+                var zona = data[i].properties.TIPO;
+                var default_color = '#0000ff'; //per defecte la zona es blava
+                if(zona!=='BLAVA') {
+                    default_color = "#369b43"; //si la zona es verda, canvio el color a verd
+                }
+                console.log(data[i].properties);
                 var polygon = L.polygon([
                     [localitzacioAparcament[1], localitzacioAparcament[0]],
                     [localitzacioAparcament2[1], localitzacioAparcament2[0]]
-                ]).addTo(mymap);
+                ], {
+                    color: default_color
+                }).addTo(mymap);
+
+                /*var marker = L.marker([((localitzacioAparcament[1])+(localitzacioAparcament2[1]))/2, ((localitzacioAparcament[0])+(localitzacioAparcament2[0]))/2]).addTo(mymap);*/
+
+                polygon.bindPopup(generarContingutPopup(data[i].properties));
                 /*var marker = L.marker([localitzacioAparcament[1], localitzacioAparcament[0]]).addTo(mymap);
                 var marker = L.marker([localitzacioAparcament2[1], localitzacioAparcament2[0]]).addTo(mymap);*/
             }
+        }
+
+        function generarContingutPopup(propietats) {
+            var content = document.createElement('div');
+            var titol = document.createElement('h5');
+            $(titol).text(propietats.TRAMO);
+            $(content).append(titol);
+            var id =  document.createElement('p');
+            $(id).html('<strong>ID:</strong> '+propietats.ID_TRAMO);
+            $(content).append(id);
+            var horari = document.createElement('p');
+            $(horari).html('<strong>HORARI: </strong>'+(propietats.HORARIO.replace('de ', ''))); //no vull que surti: "de Lunes a Viernes", queda lleig
+            $(content).append(horari);
+            var tipo = document.createElement('p');
+            $(tipo).html('<strong>TIPO: </strong>'+ propietats.TIPO !=='BLAVA' ? '<span style=\'background-color:#369b43 \'>VERDA</span>' : '<span style=\'background-color: #0000ff\'>BLAVA</span>');
+            $(content).append(tipo);
+            var tarifa = document.createElement('p');
+            $(tarifa).html('<strong>TARIFA: </strong>'+ (propietats.TARIFA.replace('E', '<i class="fas fa-euro-sign"></i>'))); //vull que surti el simbol de euro en compte de E
+            $(content).append(tarifa);
+            var prediccions = document.createElement('p');
+            $(prediccions).html('<strong>PREDICCIONS: </strong>');
+            $(content).append(prediccions);
+            var button = document.createElement('button');
+            $(button).html('Veure predicicons');
+            $(content).append(button);
+
+            return content;
         }
 
         $("#modalGuardar").click(function () {
