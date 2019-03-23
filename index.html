@@ -6,17 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
         integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-        crossorigin=""></script>
+    
 </head>
 
 <body>
@@ -38,7 +32,7 @@
         Prem per canviar-la
     </button>
 
-    <!-- Modal -->
+    <!-- Modal Frequencia 
     <div class="modal fade" id="modalFreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -59,6 +53,26 @@
             </div>
         </div>
     </div>
+    -->
+    <!-- Modal prediccions -->
+    <div class="modal fade" id="modalPred" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Freqüència d'actualització</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tancar</button>
+            </div>
+        </div>
+    </div>
+</div>
     <button class="btn btn-primary" id="stop">Stop</button>
     <button class="btn btn-primary" id="rep">Rep</button>
     </div>
@@ -69,10 +83,17 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             inicialitzar(3);
-            //actualitzaDades();
         });
 
         function chart(info) {
@@ -175,10 +196,11 @@
             }*/
             map(aparcaments);
             //chart(arrayTipus);
-
+            var linea = "<div id='txt'><p>Ultima actualització: <strong>" + lastUpdateTime + "</strong></p></div>";
+            $("#contingut").append(linea);
 
             /*
-            var linea = "<div id='txt'><p>Nova actualització <strong>" + lastUpdateTime + "</strong>";
+
             for (tipo in TIPUS_ZONA) {
                 linea = linea + "<br>Estació tipus:" + tipo + " hi ha <strong>" + arrayTipus[tipo] +
                     "</strong> estacions amb <strong>" + arrayBicisPerTipus[tipo] +
@@ -193,7 +215,7 @@
 
             $("#mapid").remove();
             document.getElementById('mapContainer').innerHTML =
-                "<div id='mapid' style='width: 1200; height: 600px; float: left;'></div>";
+                "<div id='mapid' style='width: 100%; height: 72.5%; float: left;'></div>";
 
             var mymap = L.map('mapid').setView([41.3908901, 2.1709899], 13);
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -211,7 +233,6 @@
                 if(zona!=='BLAVA') {
                     default_color = "#369b43"; //si la zona es verda, canvio el color a verd
                 }
-                console.log(data[i].properties);
                 var polygon = L.polygon([
                     [localitzacioAparcament[1], localitzacioAparcament[0]],
                     [localitzacioAparcament2[1], localitzacioAparcament2[0]]
@@ -239,7 +260,8 @@
             $(horari).html('<strong>HORARI: </strong>'+(propietats.HORARIO.replace('de ', ''))); //no vull que surti: "de Lunes a Viernes", queda lleig
             $(content).append(horari);
             var tipo = document.createElement('p');
-            $(tipo).html('<strong>TIPO: </strong>'+ propietats.TIPO !=='BLAVA' ? '<span style=\'background-color:#369b43 \'>VERDA</span>' : '<span style=\'background-color: #0000ff\'>BLAVA</span>');
+            var zona = propietats.TIPO !=="BLAVA" ? "<span style='background-color:#369b43; color: white'>VERDA</span>" : "<span style='background-color: #0000ff; color: white'>BLAVA</span>";
+            $(tipo).html('<strong>TIPO: </strong>'+ zona);
             $(content).append(tipo);
             var tarifa = document.createElement('p');
             $(tarifa).html('<strong>TARIFA: </strong>'+ (propietats.TARIFA.replace('E', '<i class="fas fa-euro-sign"></i>'))); //vull que surti el simbol de euro en compte de E
@@ -249,9 +271,33 @@
             $(content).append(prediccions);
             var button = document.createElement('button');
             $(button).html('Veure predicicons');
+            $(button).attr("class", "btn");
+            $(button).attr("id", "");
+            /*$(button).attr("data-toggle", "modal");
+            $(button).attr("data-target", "modalPred");*/
+            //console.log(propietats);
+            $(button).click(function() {
+                generarPrediccio(propietats.TRAMO,propietats.PREDICCIONES);
+            });
             $(content).append(button);
 
             return content;
+        }
+        function generarPrediccio(titol,prediccions) {
+            bootbox.alert({
+                size: "small",
+                title: titol,
+                message: prediccions
+            });
+            desglosarPreddiccio(prediccions);
+
+        }
+
+        function desglosarPreddiccio(prediccio) {
+            var i;
+            for(i = 0; i < prediccio.length; i++) {
+                console.log(prediccio.charAt(i));
+            }
         }
 
         $("#modalGuardar").click(function () {
