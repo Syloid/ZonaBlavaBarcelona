@@ -1,0 +1,162 @@
+nav.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+}
+.modal-title {
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+.modal-header .close {
+    margin: 0rem 0rem 0rem 0rem;
+    color: #fff;
+}
+
+.modal-footer {
+    background-color: #343a40;
+    border-top: 1px solid #343a40;
+    color: white
+}
+
+.modal-footer a.btn {
+    color: white
+}
+
+table {
+    width: 100%;
+    font-size: 12px;
+}
+
+table tbody tr td:hover {
+    background-color: rgba(0, 0, 0, .075);
+}
+table.columns tbody tr td:hover {
+    background-color: unset;
+}
+
+table tbody tr td, table thead tr th {
+    text-align: center;
+}
+
+table thead tr th {
+    width: 13%;
+}
+
+table tbody tr:hover {
+    background-color: unset !important;
+}
+
+.modal-body {
+    height: calc(100vh - 45%);
+    overflow-y: scroll;
+    background-color: #343a40;
+}
+
+.modal-header {
+    background-color: #343a40;
+    color: white;
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: calc(100vw - 6rem);
+    }
+}
+
+.half {
+    width: 50%;
+}
+
+#taula1, #taula2 {
+    transition: all 1s;
+}
+
+#grafiques h1 {
+    width: 100%;
+    text-align: center
+}
+
+.smallAlert {
+    width: 398px !important;
+    height: 421px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+ul {
+    margin-right: auto;
+    list-style: none
+}
+
+ul.llegenda li:before {
+    content: "\f0c8";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    padding-right: 5px;
+    color: rgb(101, 107, 113);
+}
+
+ul.llegenda li:nth-child(1):before {
+    color: #dc3545;
+}
+
+ul.llegenda li:nth-child(2):before {
+    color: #28a745;
+}
+
+ul.llegenda li:nth-child(3):before {
+    color: #e49420;
+}
+
+.modal-footer>:not(:last-child) {
+    margin-right: auto;
+}
+
+span {
+    padding: 4px
+}
+
+div.botons a {
+    margin-right: 6px;
+}
+
+.leaflet-popup-content, .leaflet-popup-content-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #343a40;
+    color: white
+}
+
+.leaflet-popup-content div strong {
+    color: rgb(245, 245, 245)
+}
+
+.leaflet-popup-content div p {
+    color: rgb(165, 165, 165) !important
+}
+
+.leaflet-popup-content div button {
+    color: white;
+}
+
+body {
+    background-color: #343a40f5;
+    color: white
+}
+
+/*scrollbar*/
+::-webkit-scrollbar-button {
+    display: none;
+    height: 13px;
+    border-radius: 0px;
+    background-color: rgb(122, 122, 122);
+}
+::-webkit-scrollbar-thumb {
+    background-color: #505962;
+}
+::-webkit-scrollbar-track {
+    background-color: #5c6670;
+}
+::-webkit-scrollbar {
+    width: 13px;
+}

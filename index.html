@@ -1,85 +1,57 @@
 <html>
 
 <head>
-    <title>TODO supply a title</title>
+    <title>ZonaBlavaBarcelona</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css"
+        integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
         integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin="" />
-    
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">ZonaBlavaBarcelona</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                  <ul class="navbar-nav">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    
-                  </ul>
-                </div>
-              </nav>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFreq">
-        Prem per canviar-la
-    </button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">ZonaBlavaBarcelona</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#grafiques">Estadistiques</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <!-- Modal Frequencia 
-    <div class="modal fade" id="modalFreq" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Freqüència d'actualització</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <label>Freqüència d'actualització: </label> <input type="number" min="1" id="freq">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tancar</button>
-                    <button type="button" class="btn btn-primary" id="modalGuardar">Guardar canvis</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- Modal prediccions -->
-    <div class="modal fade" id="modalPred" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Freqüència d'actualització</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tancar</button>
-            </div>
-        </div>
-    </div>
-</div>
-    <button class="btn btn-primary" id="stop">Stop</button>
-    <button class="btn btn-primary" id="rep">Rep</button>
-    </div>
-    <div id="contingut">Freqüència d'actualització actual: <span id="interval"></span></div>
-    <!--<div id="mapid" style="height: 500px; width: 500px; position: absolute"></div>-->
+    <div id="contingut"></div>
     <div id='mapContainer'></div>
-    <div id="chart_div" style="float: right;"></div>
+    <div id='grafiques'>
+
+        <table class="columns">
+            <tr>
+                <td>
+                    <div id="donutchart" style='width: 45vw'>
+                </td>
+                <td>
+                    <div id="barChart" style='width: 45vw'></div>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <div id="piechart_3d"></div>
+    </div>
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -96,49 +68,6 @@
             inicialitzar(3);
         });
 
-        function chart(info) {
-            // Load the Visualization API and the corechart package.
-            google.charts.load('current', {
-                'packages': ['corechart']
-            });
-
-            // Set a callback to run when the Google Visualization API is loaded.
-            google.charts.setOnLoadCallback(drawChart);
-
-            // Callback that creates and populates a data table,
-            // instantiates the pie chart, passes in the data and
-            // draws it.
-            function drawChart() {
-
-                // Create the data table.
-                var data = new google.visualization.DataTable();
-
-                var datos = new Array();
-                for (tipo in info) {
-                    var estacio = new Array(tipo);
-                    estacio.push(info[tipo]);
-                    datos.push(estacio);
-                }
-
-                data.addColumn('string', 'Topping');
-                data.addColumn('number', 'Slices');
-                data.addRows(datos);
-
-
-                // Set chart options
-                var options = {
-                    'title': 'Quantitat d\'estacions per tipus',
-                    'width': 400,
-                    'height': 300
-                };
-
-                // Instantiate and draw our chart, passing in some options.
-                $("chart_div").remove();
-                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-                chart.draw(data, options);
-            }
-        }
-
         function inicialitzar(frequencia) {
             var frequenciaActualitzacio = frequencia; //inicialitzem
             interval = setInterval(consultaDades, frequenciaActualitzacio * 1000); //actualitzem dades cada quan toqui....
@@ -146,7 +75,6 @@
             $("#interval").html(parseInt(frequenciaActualitzacio));
         }
 
-        //var dadesRebudes = {};
         var lastUpdateTime = 0;
 
         function consultaDades() {
@@ -155,6 +83,8 @@
             }).done(function (data) {
                 if (data.OPENDATA_PSIU_APPARKB[0].FH_INICIO != lastUpdateTime) {
                     lastUpdateTime = data.OPENDATA_PSIU_APPARKB[0].FH_INICIO;
+                    date = new Date(parseInt(lastUpdateTime.substring(6, 10)), parseInt(lastUpdateTime.substring(3, 5)) - 1, parseInt(lastUpdateTime.substring(0, 2)), 8, 0, 0);
+                    resetDate = date;
                     actualitzaDadesPantalla(data);
                 }
             })
@@ -173,43 +103,139 @@
                 isNaN(TIPUS_TARIFA[aparcaments[i].properties.TARIFA]) ? TIPUS_TARIFA[aparcaments[i].properties.TARIFA] = 0 : TIPUS_TARIFA[aparcaments[i].properties.TARIFA]++;
                 isNaN(TIPUS_HORARI[aparcaments[i].properties.HORARIO]) ? TIPUS_HORARI[aparcaments[i].properties.HORARIO] = 0 : TIPUS_HORARI[aparcaments[i].properties.HORARIO]++;
             }
-            //console.log(TIPUS_ZONA);
-            //console.log(TIPUS_TARIFA);
-            //console.log(TIPUS_HORARI);
+            console.log(TIPUS_HORARI);
 
-            /*arrayTipus = [];
-            arrayBicisPerTipus = [];
-            arraySlots = [];
-
-            $("#txt").remove();
-
-
-            //recorro array i vaig posant ja dades
-            for (i = 0; i < data.stations.length; i++) {
-                isNaN(arrayTipus[data.stations[i].type]) ? arrayTipus[data.stations[i].type] = 0 : arrayTipus[data.stations[
-                    i].type]++;
-                isNaN(arrayBicisPerTipus[data.stations[i].type]) ? arrayBicisPerTipus[data.stations[i].type] = parseInt(
-                    data.stations[i].bikes) : arrayBicisPerTipus[data.stations[i].type] += parseInt(data.stations[i]
-                    .bikes);
-                isNaN(arraySlots[data.stations[i].type]) ? arraySlots[data.stations[i].type] = parseInt(data.stations[i]
-                    .slots) : arraySlots[data.stations[i].type] += parseInt(data.stations[i].slots);
-            }*/
             map(aparcaments);
-            //chart(arrayTipus);
-            var linea = "<div id='txt'><p>Ultima actualització: <strong>" + lastUpdateTime + "</strong></p></div>";
-            $("#contingut").append(linea);
-
-            /*
-
-            for (tipo in TIPUS_ZONA) {
-                linea = linea + "<br>Estació tipus:" + tipo + " hi ha <strong>" + arrayTipus[tipo] +
-                    "</strong> estacions amb <strong>" + arrayBicisPerTipus[tipo] +
-                    "</strong> bicis disponibles i <strong>" + arraySlots[tipo] + "</strong> slots lliures.";
-            }
-            //afegueixo contingut dins html
-            $("#contingut").append(linea + "</p></div>");
-            */
+            $('#grafiques').prepend('<h1>Estadistiques</h1>');
+            donutChart(TIPUS_ZONA);
+            barChart(TIPUS_TARIFA);
+            piechart3D(TIPUS_HORARI);
         }
+
+        function convertirDadesPerChart(info, tipus) {
+            var datos = new Array(tipus);
+            for (tipo in info) {
+                var tipoinfo = new Array(tipo);
+                tipoinfo.push(info[tipo]);
+                datos.push(tipoinfo);
+            }
+
+            return datos;
+        }
+
+        function piechart3D(info) {
+            google.charts.load("current", { packages: ["corechart"] });
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var datos = convertirDadesPerChart(info, ['Horari', 'Quantitat',]);
+                var data = google.visualization.arrayToDataTable(datos);
+
+                var options = {
+                    title: 'Quantitat d\'aparcaments segons horari ',
+                    pieHole: 0.4,
+                    backgroundColor: '#3b4147',
+                    pieSliceBorderColor: '#343a40',
+                    pieSliceTextStyle: {
+                        color: 'white'
+                    },
+                    legend: {
+                        position: 'bottom',
+                        textStyle: {
+                            color: 'white'
+                        }
+                    },
+                    titleTextStyle: {
+                        color: 'white'
+                    },
+                    is3D: true
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                chart.draw(data, options);
+            }
+        }
+
+        function barChart(info) {
+            var datos = convertirDadesPerChart(info, ['Tarifa', 'Quantitat',]);
+            google.charts.load('current', { packages: ['corechart', 'bar'] });
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+
+                var data = google.visualization.arrayToDataTable(datos);
+                data.sort([{ column: 1, desc: true }, { column: 0, desc: true }]);
+
+                var options = {
+                    title: 'Preu de les tarifes',
+                    chartArea: { width: '50%' },
+                    colors: ['#007bff', '#1a88ff', '#3396ff', '#4da3ff', '#66b0ff'],
+                    hAxis: {
+                        title: 'Total Aparcaments',
+                        minValue: 0,
+                        textStyle: {
+                            color: 'white'
+                        },
+                        titleTextStyle: {
+                            color: 'white'
+                        },
+                        minorGridlines: {
+                            color: 'white'
+                        }
+                    },
+                    vAxis: {
+                        title: 'Tarifa',
+                        textStyle: {
+                            color: 'white'
+                        },
+                        titleTextStyle: {
+                            color: 'white'
+                        }
+                    },
+                    backgroundColor: '#3b4147',
+                    legend: { textStyle: { color: '#b7b7b7' } },
+                    titleTextStyle: {
+                        color: 'white'
+                    }
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById('barChart'));
+
+
+                chart.draw(data, options);
+            }
+        }
+
+        function donutChart(info) {
+            var datos = convertirDadesPerChart(info, ["Tipus", "Zona"]);
+
+            google.charts.load("current", { packages: ["corechart"] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable(datos);
+
+                var options = {
+                    title: 'Tipus de zones',
+                    pieHole: 0.4,
+                    colors: ['#007bff', '#28a745'],
+                    backgroundColor: '#3b4147',
+                    pieSliceBorderColor: '#343a40',
+                    pieSliceTextStyle: {
+                        color: 'white'
+                    },
+                    legend: { textStyle: { color: '#b7b7b7' } },
+                    titleTextStyle: {
+                        color: 'white'
+                    }
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+                chart.draw(data, options);
+                $("text:contains(Tipus de zones)").attr({ 'x': '110', 'y': '20' })
+            }
+
+        }
+
 
         function map(data) {
 
@@ -229,23 +255,20 @@
                 var localitzacioAparcament = data[i].geometry.coordinates[0][0];
                 var localitzacioAparcament2 = data[i].geometry.coordinates[0][1];
                 var zona = data[i].properties.TIPO;
-                var default_color = '#0000ff'; //per defecte la zona es blava
-                if(zona!=='BLAVA') {
-                    default_color = "#369b43"; //si la zona es verda, canvio el color a verd
+                var default_color = '#007bff'; //per defecte la zona es blava
+                if (zona !== 'BLAVA') {
+                    default_color = "#28a745"; //si la zona es verda, canvio el color a verd
                 }
-                var polygon = L.polygon([
+                var polygon = L.polyline([
                     [localitzacioAparcament[1], localitzacioAparcament[0]],
                     [localitzacioAparcament2[1], localitzacioAparcament2[0]]
                 ], {
-                    color: default_color
-                }).addTo(mymap);
-
-                /*var marker = L.marker([((localitzacioAparcament[1])+(localitzacioAparcament2[1]))/2, ((localitzacioAparcament[0])+(localitzacioAparcament2[0]))/2]).addTo(mymap);*/
+                        color: default_color
+                    }).addTo(mymap);
 
                 polygon.bindPopup(generarContingutPopup(data[i].properties));
-                /*var marker = L.marker([localitzacioAparcament[1], localitzacioAparcament[0]]).addTo(mymap);
-                var marker = L.marker([localitzacioAparcament2[1], localitzacioAparcament2[0]]).addTo(mymap);*/
             }
+            $('.leaflet-control-zoom').append('<a class="" href="#" title="Ultima actualització: ' + lastUpdateTime + '" role="button" aria-label="" style="outline: none;"><i class="fas fa-clock" style="margin: 8.7px;"></i></a>');
         }
 
         function generarContingutPopup(propietats) {
@@ -253,65 +276,166 @@
             var titol = document.createElement('h5');
             $(titol).text(propietats.TRAMO);
             $(content).append(titol);
-            var id =  document.createElement('p');
-            $(id).html('<strong>ID:</strong> '+propietats.ID_TRAMO);
+            var id = document.createElement('p');
+            $(id).html('<strong>ID:</strong> ' + propietats.ID_TRAMO);
             $(content).append(id);
             var horari = document.createElement('p');
-            $(horari).html('<strong>HORARI: </strong>'+(propietats.HORARIO.replace('de ', ''))); //no vull que surti: "de Lunes a Viernes", queda lleig
+            $(horari).html('<strong>HORARI: </strong>' + (propietats.HORARIO.replace('de ', ''))); //no vull que surti: "de Lunes a Viernes", queda lleig
             $(content).append(horari);
             var tipo = document.createElement('p');
-            var zona = propietats.TIPO !=="BLAVA" ? "<span style='background-color:#369b43; color: white'>VERDA</span>" : "<span style='background-color: #0000ff; color: white'>BLAVA</span>";
-            $(tipo).html('<strong>TIPO: </strong>'+ zona);
+            var zona = propietats.TIPO !== "BLAVA" ? "<span style='background-color:#369b43; color: white;'>VERDA</span>" : "<span style='background-color: #007bff; color: white'>BLAVA</span>";
+            $(tipo).html('<strong>TIPUS: </strong>' + zona);
             $(content).append(tipo);
             var tarifa = document.createElement('p');
-            $(tarifa).html('<strong>TARIFA: </strong>'+ (propietats.TARIFA.replace('E', '<i class="fas fa-euro-sign"></i>'))); //vull que surti el simbol de euro en compte de E
+            $(tarifa).html('<strong>TARIFA: </strong>' + (propietats.TARIFA.replace('E', '<i class="fas fa-euro-sign"></i>'))); //vull que surti el simbol de euro en compte de E
             $(content).append(tarifa);
-            var prediccions = document.createElement('p');
-            $(prediccions).html('<strong>PREDICCIONS: </strong>');
-            $(content).append(prediccions);
             var button = document.createElement('button');
             $(button).html('Veure predicicons');
-            $(button).attr("class", "btn");
+            $(button).attr("class", "btn btn-secondary");
             $(button).attr("id", "");
-            /*$(button).attr("data-toggle", "modal");
-            $(button).attr("data-target", "modalPred");*/
-            //console.log(propietats);
-            $(button).click(function() {
-                generarPrediccio(propietats.TRAMO,propietats.PREDICCIONES);
+
+            $(button).click(function () {
+                generarPrediccio(propietats.TRAMO, propietats.PREDICCIONES, propietats.TIPO);
+                $(window).scrollTop(0);
             });
             $(content).append(button);
 
             return content;
         }
-        function generarPrediccio(titol,prediccions) {
+        function generarPrediccio(titol, prediccions, tipus) {
             bootbox.alert({
-                size: "small",
+                size: "big",
                 title: titol,
-                message: prediccions
+                message: desglosarPreddiccio(prediccions)
             });
-            desglosarPreddiccio(prediccions);
 
+            if (tipus == 'BLAVA') {
+                $(".modal-header").css('border-bottom', '2px solid #168cff');
+            } else {
+                $(".modal-header").css('border-bottom', '2px solid #28a745');
+            }
+
+
+            var botons = generarBotons();
+
+            var llegenda = "<div><ul class='llegenda'><li><strong>(80%) </strong>Hi ha gran disponibilitat de places lliures</li><li><strong>(30% - 80%) </strong>Disponibilitat mitja de places lliures</li><li><strong>(0% - 10%) </strong>No hi ha disponibilitat de places lliures o es pràcticament nula</li><li>No es coneix la predicció (Zones VERDA)</li></ul></div>"
+            $(".modal-footer").prepend(botons);
+            $(".modal-footer").prepend(llegenda);
+
+            date = new Date(parseInt(lastUpdateTime.substring(6, 10)), parseInt(lastUpdateTime.substring(3, 5)) - 1, parseInt(lastUpdateTime.substring(0, 2)), 8, 0, 0); //resetejem
+        }
+
+        function generarBotons() {
+            var div = document.createElement('div');
+            var buttonNext = document.createElement('a');
+            var date2 = sumarDia(date, 1);
+
+            $(buttonNext).addClass('btn btn-secondary');
+            $(buttonNext).attr('href', '');
+            $(buttonNext).text("Previsió " + date2.toString().substring(0, date.toString().indexOf("08:00:00")));
+            $(buttonNext).click(function (e) {
+                e.preventDefault();
+                $("#taula1").css('display', 'none');
+                $("#taula2").css('display', 'table');
+            });
+
+            var buttonPrev = document.createElement('a');
+
+            $(buttonPrev).text("Previsió " + date.toString().substring(0, date.toString().indexOf("08:00:00")));
+            $(buttonPrev).addClass('btn btn-secondary');
+            $(buttonPrev).attr('href', '');
+            $(buttonPrev).click(function (e) {
+                e.preventDefault();
+                $("#taula2").css('display', 'none');
+                $("#taula1").css('display', 'table');
+            });
+            $(div).addClass('botons')
+            $(div).append(buttonPrev);
+            $(div).append(buttonNext);
+
+            return div;
+        }
+
+
+        function sumarDia(date, dia) {
+            var resultat = new Date(date);
+            resultat.setDate(resultat.getDate() + dia);
+            return resultat;
         }
 
         function desglosarPreddiccio(prediccio) {
-            var i;
-            for(i = 0; i < prediccio.length; i++) {
-                console.log(prediccio.charAt(i));
+            var taula1 = generarTaulaPrediccions(1, date, prediccio.slice(0, prediccio.length / 2));
+            date.setHours(8);
+            date.setMinutes(0);
+
+            var date2 = sumarDia(date, 1);
+            var taula2 = generarTaulaPrediccions(2, date2, prediccio.slice(prediccio.length / 2));
+            date2.setHours(8);
+            date2.setMinutes(0);
+
+            var contenedor = document.createElement('div');
+            $(contenedor).append(taula1);
+            $(contenedor).append(taula2);
+
+            return contenedor;
+        }
+        function formatejarTemps(date) {
+            if (date < 10) {
+                return "0" + date;
             }
+            return date;
         }
 
-        $("#modalGuardar").click(function () {
-            clearInterval(interval);
-            inicialitzar(parseInt($("#freq").val()));
-            $("#modalFreq").modal("hide");
-        });
+        function limpiarPrediccions(prediccio, date) {
+            var prediccioLimpia = [];
+            var i;
+            for (i = 0; i < prediccio.length; i++) {
+                var hores = formatejarTemps(date.getHours());
+                var minuts = formatejarTemps(date.getMinutes());
+                var horaPrediccio = hores + ":" + minuts;
 
-        $("#stop").click(function () {
-            clearInterval(interval);
-        });
-        $("#rep").click(function () {
-            inicialitzar(3);
-        });
+                prediccioLimpia[horaPrediccio] = prediccio.charAt(i);
+                date.setMinutes(date.getMinutes() + 5);
+            }
+
+            return prediccioLimpia;
+        }
+
+        function generarTaulaPrediccions(numTaula, date, prediccio) {
+            var prediccionsLimpies = limpiarPrediccions(prediccio, date);
+            console.log(prediccionsLimpies)
+            var div = document.createElement('div');
+            $(div).load("table.html", null, function () {
+                $(this).find("table").attr("id", "taula" + numTaula);
+                numTaula == 2 ? $(this).find("table").css('display', 'none') : null;
+
+                var tbody = $(this).find("table").find('tbody');
+
+
+                $(tbody).find('td').each(function (j) {
+                    if ($(this).attr("rowspan") == undefined) {
+                        var className = $(this).attr("class");
+                        var horaPrediccio = className.substring(0, 2) + ":" + className.substring(3, 5);
+
+                        $(this).css('background-color', formatejarPrediccio(prediccionsLimpies[horaPrediccio]));
+                        date.setMinutes(date.getMinutes() + 5);
+                    }
+                });
+            });
+            return div;
+        }
+
+        function formatejarPrediccio(numero) {
+            if (numero == 0) {
+                return "rgb(101, 107, 113)"; //gris
+            } else if (numero == 1) {
+                return "#28a745"; //verd
+            } else if (numero == 2) {
+                return "#e49420"; //taronja
+            } else {
+                return "#dc3545"; //vermell
+            }
+        }
     </script>
 </body>
 
