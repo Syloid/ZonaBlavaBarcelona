@@ -65,13 +65,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            posicioUsuari =[];
+            getLocation();
             inicialitzar(3);
         });
 
         function inicialitzar(frequencia) {
+            
             var frequenciaActualitzacio = frequencia; //inicialitzem
             interval = setInterval(consultaDades, frequenciaActualitzacio * 1000); //actualitzem dades cada quan toqui....
-
             $("#interval").html(parseInt(frequenciaActualitzacio));
         }
 
@@ -88,6 +90,20 @@
                     actualitzaDadesPantalla(data);
                 }
             })
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(guardarPosicio);
+            } else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function guardarPosicio(position) {
+            //assignem les coordenades d'on es troba l'posicioUsuari
+            posicioUsuari['latitude'] = position.coords.latitude; 
+            posicioUsuari['longitude'] = position.coords.longitude;
         }
 
         function actualitzaDadesPantalla(data) {
@@ -236,9 +252,11 @@
 
         }
 
+        function afegirPosicioposicioUsuari(map) {
+            L.marker([posicioUsuari['latitude'], posicioUsuari['longitude']]).addTo(map).bindPopup('<h2>Localització actual</h2><ul><li>Latitud: '+posicioUsuari['latitude']+'</li><li>Longitud: '+posicioUsuari['longitude']+'</li></ul>');
+        }
 
         function map(data) {
-
             $("#mapid").remove();
             document.getElementById('mapContainer').innerHTML =
                 "<div id='mapid' style='width: 100%; height: 72.5%; float: left;'></div>";
@@ -250,6 +268,8 @@
                 id: 'mapbox.streets',
                 accessToken: 'pk.eyJ1Ijoic3lsb2lkIiwiYSI6ImNqdDh5Zm14bzAzMXU0M3F0Z3YxOTc5dnEifQ.dENVumuAU-SgCnUDsaqeKQ'
             }).addTo(mymap);
+
+            
 
             for (i = 0; i < data.length; i++) {
                 var localitzacioAparcament = data[i].geometry.coordinates[0][0];
@@ -268,6 +288,7 @@
 
                 polygon.bindPopup(generarContingutPopup(data[i].properties));
             }
+            if(posicioUsuari !=='undefined') {afegirPosicioposicioUsuari(mymap);}
             $('.leaflet-control-zoom').append('<a class="" href="#" title="Ultima actualització: ' + lastUpdateTime + '" role="button" aria-label="" style="outline: none;"><i class="fas fa-clock" style="margin: 8.7px;"></i></a>');
         }
 

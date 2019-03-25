@@ -98,15 +98,15 @@ ul.llegenda li:before {
 }
 
 ul.llegenda li:nth-child(1):before {
-    color: #dc3545;
-}
-
-ul.llegenda li:nth-child(2):before {
     color: #28a745;
 }
 
-ul.llegenda li:nth-child(3):before {
+ul.llegenda li:nth-child(2):before {
     color: #e49420;
+}
+
+ul.llegenda li:nth-child(3):before {
+    color: #dc3545;
 }
 
 .modal-footer>:not(:last-child) {
