@@ -149,7 +149,7 @@ body {
     color: white
 }
 
-.leaflet-routing-alt, .leaflet-routing-container, .leaflet-routing-error {
+.leaflet-routing-alt, .leaflet-routing-container, .leaflet-routing-error, div.leaflet-popup-tip {
     background-color: #343a40;
 }
 .leaflet-routing-icon ,.leaflet-routing-icon-depart {
@@ -163,6 +163,8 @@ body {
 button.btn.btn-info {
     margin-left: 2px;
 }
+
+
 /*scrollbar*/
 ::-webkit-scrollbar-button {
     display: none;

@@ -26,9 +26,6 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="#grafiques">Estadistiques</a>
                 </li>
             </ul>
@@ -67,7 +64,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            posicioUsuari =[];
+            posicioUsuari = [];
             getLocation();
             inicialitzar(3, null);
         });
@@ -86,11 +83,11 @@
                 url: 'https://opendata-ajuntament.barcelona.cat/resources/bsm/PSIU_AREABLAVA.JSON'
             }).done(function (data) {
                 if (data.OPENDATA_PSIU_APPARKB[0].FH_INICIO != lastUpdateTime) {
-                    $()
+
                     lastUpdateTime = data.OPENDATA_PSIU_APPARKB[0].FH_INICIO;
                     date = new Date(parseInt(lastUpdateTime.substring(6, 10)), parseInt(lastUpdateTime.substring(3, 5)) - 1, parseInt(lastUpdateTime.substring(0, 2)), 8, 0, 0);
                     resetDate = date;
-                    $("#grafiques").find("h1").remove();
+                    netejarGrafics();
                     actualitzaDadesPantalla(data, sort);
                 }
             })
@@ -102,9 +99,17 @@
             }
         }
 
+        function netejarGrafics() {
+            $("#mapid").remove();
+            $("#grafiques").find("h1").remove();
+            $("#donutchart").empty();
+            $("#barChart").empty();
+            $("#piechart_3d").empty();
+        }
+
         function guardarPosicio(position) {
             //assignem les coordenades d'on es troba l'posicioUsuari
-            posicioUsuari['latitude'] = position.coords.latitude; 
+            posicioUsuari['latitude'] = position.coords.latitude;
             posicioUsuari['longitude'] = position.coords.longitude;
         }
 
@@ -245,15 +250,14 @@
                 };
 
                 function seleccionat() {
-                //Documentacio: https://developers.google.com/chart/interactive/docs/basic_interactivity 
-                var seleccio = chart.getSelection()[0];
+                    //Documentacio: https://developers.google.com/chart/interactive/docs/basic_interactivity 
+                    var seleccio = chart.getSelection()[0];
                     if (seleccio) {//si tenim la seleccio
                         var seleccionat = data.getValue(seleccio.row, 0); //agafem el seleccionat a traves de data
-                        console.log(seleccionat);
                         clearInterval(interval);
                         inicialitzar(2, seleccionat);
                     }
-                } 
+                }
 
 
                 var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
@@ -265,13 +269,12 @@
         }
 
         function afegirPosicioposicioUsuari() {
-            L.marker([posicioUsuari['latitude'], posicioUsuari['longitude']]).addTo(mymap).bindPopup('<h2>Localització actual</h2><ul><li>Latitud: '+posicioUsuari['latitude']+'</li><li>Longitud: '+posicioUsuari['longitude']+'</li></ul>');
+            L.marker([posicioUsuari['latitude'], posicioUsuari['longitude']]).addTo(mymap).bindPopup('<h2>Localització actual</h2><ul><li>Latitud: ' + posicioUsuari['latitude'] + '</li><li>Longitud: ' + posicioUsuari['longitude'] + '</li></ul>');
         }
 
         function map(data, sort) {
-            console.log("aaaaa");
-            $("#mapid").remove();
-            document.getElementById('mapContainer').innerHTML = "<div id='mapid' style='width: 100%; height: 72.5%; float: left;'></div>";
+
+            document.getElementById('mapContainer').innerHTML = "<div id='mapid' style='width: 100%; height: 80%; float: left;'></div>";
 
             mymap = L.map('mapid').setView([41.3908901, 2.1709899], 13);
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -282,16 +285,16 @@
             }).addTo(mymap);
             var i = 0;
             for (i = 0; i < data.length; i++) {
-                    var zona = data[i].properties.TIPO;
-                    if((sort == null) || (zona == sort)) {
+                var zona = data[i].properties.TIPO;
+                if ((sort == null) || (zona == sort)) {
 
                     var localitzacioAparcament = data[i].geometry.coordinates[0][0];
                     var localitzacioAparcament2 = data[i].geometry.coordinates[0][1];
 
-                    var default_color = '#007bff'; //per defecte la zona es blava
-                    //si la zona es verda, canvio el color a verd
-                    zona !== 'BLAVA' ? default_color = "#28a745" : null; 
-                   
+                    var default_color; 
+                    //per defecte la zona es blava...si la zona es verda, canvio el color a verd
+                    zona !== 'BLAVA' ? default_color = "#28a745" : default_color = '#007bff';
+
                     var polygon = L.polyline([
                         [localitzacioAparcament[1], localitzacioAparcament[0]],
                         [localitzacioAparcament2[1], localitzacioAparcament2[0]]
@@ -300,9 +303,9 @@
                         }).addTo(mymap);
 
                     polygon.bindPopup(generarContingutPopup(data[i].properties, localitzacioAparcament[1], localitzacioAparcament[0]));
-                    }
+                }
             }
-            if(posicioUsuari !=='undefined') {afegirPosicioposicioUsuari();}
+            if (posicioUsuari !== 'undefined') { afegirPosicioposicioUsuari(); }
             $('.leaflet-control-zoom').append('<a class="" id="ultimaActualitzacio" href="#" title="Ultima actualització: ' + lastUpdateTime + '" role="button" aria-label="" style="outline: none;"><i class="fas fa-clock" style="margin: 8.7px;"></i></a>');
         }
 
@@ -336,7 +339,7 @@
                 $(window).scrollTop(0);
             });
 
-            $(anar).click(function() {
+            $(anar).click(function () {
                 //$('.leaflet-right').remove();
                 generarRuta(longitud, latitud);
             });
@@ -348,17 +351,23 @@
         }
 
         function generarRuta(longitud, latitud) {
-            if(typeof routing !== "undefined") {routing.spliceWaypoints(0, 2); /*si existeix la borro*/}
+            if (typeof routing !== "undefined") { routing.spliceWaypoints(0, 2); /*si existeix la borro*/ }
             //si no la creo
             routing = L.Routing.control({
                 waypoints: [
-                    L.latLng(longitud, latitud ),
+                    L.latLng(longitud, latitud),
                     L.latLng(posicioUsuari['latitude'], posicioUsuari['longitude'])
-                ]
-                }).addTo(mymap);
-
+                ],
+                collapsible: true //collapsible true fara que es mostri un boto a la finestra de la ruta per poder tancar-la
+            }).addTo(mymap);
         }
 
+        $('div').on('click', '.leaflet-routing-collapse-btn', function(){
+            //quan tanquem la finestra de la ruta borrem la ruta del mapa amb la seva respectiva finestra
+            routing.spliceWaypoints(0, 2); //borrem ruta
+            $('.leaflet-control-container').find('.leaflet-right').remove();
+        });
+        
         function generarPrediccio(titol, prediccions, tipus) {
             bootbox.alert({
                 size: "big",
@@ -460,7 +469,6 @@
 
         function generarTaulaPrediccions(numTaula, date, prediccio) {
             var prediccionsLimpies = limpiarPrediccions(prediccio, date);
-            console.log(prediccionsLimpies)
             var div = document.createElement('div');
             $(div).load("table.html", null, function () {
                 $(this).find("table").attr("id", "taula" + numTaula);
@@ -494,8 +502,9 @@
             }
         }
 
-        $("#ultimaActualitzacio").click(function() {
-            alert()
+        $("div").on('click', '#ultimaActualitzacio', function () {
+            clearInterval(interval);
+            inicialitzar(3, null);
         });
     </script>
 </body>
